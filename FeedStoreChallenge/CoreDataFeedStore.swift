@@ -78,7 +78,7 @@ public class CoreDataFeedStore: FeedStore {
 	}
 }
 
-extension CoreDataFeedImage {
+private extension CoreDataFeedImage {
 	convenience init(_ image: LocalFeedImage, insertInto context: NSManagedObjectContext) {
 		self.init(context: context)
 		id = image.id
@@ -96,7 +96,7 @@ extension CoreDataFeedImage {
 	}
 }
 
-extension CoreDataCache {
+private extension CoreDataCache {
 	convenience init(feed: [LocalFeedImage], timestamp: Date, insertInto context: NSManagedObjectContext) {
 		self.init(context: context)
 		date = timestamp
