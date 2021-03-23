@@ -6,11 +6,13 @@
 import CoreData
 
 public class CoreDataFeedStore: FeedStore {
-	private var container: NSPersistentContainer
 	
 	enum Error: Swift.Error {
 		case modelNotFound
 	}
+	
+	private var container: NSPersistentContainer
+	private var context: NSManagedObjectContext
 	
 	public init(storeURL: URL, modelBundle: Bundle = Bundle.main) throws {
 		guard let modelURL = modelBundle.url(forResource: "CoreDataFeedModel", withExtension: "momd"),
@@ -21,6 +23,7 @@ public class CoreDataFeedStore: FeedStore {
 		container = NSPersistentContainer(name: "CoreDataFeedModel", managedObjectModel: model)
 		container.persistentStoreDescriptions = [NSPersistentStoreDescription(url: storeURL)]
 		container.loadPersistentStores(completionHandler: {_,_ in})
+		context = container.newBackgroundContext()
 	}
 	
 	public func deleteCachedFeed(completion: @escaping DeletionCompletion) {
@@ -28,7 +31,6 @@ public class CoreDataFeedStore: FeedStore {
 	}
 	
 	public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
-		
 	}
 	
 	public func retrieve(completion: @escaping RetrievalCompletion) {
