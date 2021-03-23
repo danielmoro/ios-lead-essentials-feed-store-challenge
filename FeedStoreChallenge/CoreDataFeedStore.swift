@@ -35,3 +35,37 @@ public class CoreDataFeedStore: FeedStore {
 		completion(.empty)
 	}
 }
+
+extension CoreDataFeedImage {
+	convenience init(_ image: LocalFeedImage, insertInto context: NSManagedObjectContext) {
+		self.init(context: context)
+		id = image.id
+		imageDescription = image.description
+		location = image.location
+		url = image.url
+	}
+	
+	var local: LocalFeedImage? {
+		guard let id = id, let url = url else {
+			return nil
+		}
+		
+		return LocalFeedImage(id: id, description: imageDescription, location: location, url: url)
+	}
+}
+
+extension CoreDataCache {
+	convenience init(feed: [LocalFeedImage], timestamp: Date, insertInto context: NSManagedObjectContext) {
+		self.init(context: context)
+		date = timestamp
+		self.feed = NSOrderedSet(array: feed.map { CoreDataFeedImage($0, insertInto: context) })
+	}
+
+	var localFeed: [LocalFeedImage] {
+		guard let feed = feed?.array as? [CoreDataFeedImage] else {
+			return []
+		}
+
+		return feed.compactMap(\.local)
+	}
+}
