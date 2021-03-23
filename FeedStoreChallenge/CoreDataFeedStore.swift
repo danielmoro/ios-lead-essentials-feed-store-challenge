@@ -40,10 +40,14 @@ public class CoreDataFeedStore: FeedStore {
 	
 	public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
 		context.perform { [unowned self] in
-			try? deleteCacheIfNeeded()
-			_ = CoreDataCache(feed: feed, timestamp: timestamp, insertInto: context)
-			try? self.context.save()
-			completion(nil)
+			do {
+				try deleteCacheIfNeeded()
+				_ = CoreDataCache(feed: feed, timestamp: timestamp, insertInto: context)
+				try self.context.save()
+				completion(nil)
+			} catch {
+				completion(error)
+			}
 		}
 	}
 	
