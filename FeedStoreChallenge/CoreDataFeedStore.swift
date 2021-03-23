@@ -3,12 +3,25 @@
 //  Copyright © 2021 Essential Developer. All rights reserved.
 //  
 
-import Foundation
+import CoreData
 
 public class CoreDataFeedStore: FeedStore {
-	public init() {
-		
+	private var container: NSPersistentContainer
+	
+	enum Error: Swift.Error {
+		case modelNotFound
 	}
+	
+	public init(modelBundle: Bundle = Bundle.main) throws {
+		guard let modelURL = modelBundle.url(forResource: "CoreDataFeedModel", withExtension: "momd"),
+			  let model = NSManagedObjectModel(contentsOf: modelURL) else {
+			throw Error.modelNotFound
+		}
+		
+		container = NSPersistentContainer(name: "CoreDataFeedModel", managedObjectModel: model)
+		container.loadPersistentStores(completionHandler: {_,_ in})
+	}
+	
 	public func deleteCachedFeed(completion: @escaping DeletionCompletion) {
 		
 	}
