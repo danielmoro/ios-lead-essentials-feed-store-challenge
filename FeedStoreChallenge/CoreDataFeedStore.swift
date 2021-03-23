@@ -13,14 +13,17 @@ public class CoreDataFeedStore: FeedStore {
 	
 	private var container: NSPersistentContainer
 	private var context: NSManagedObjectContext
+	private static var modelName: String {
+		"CoreDataFeedModel"
+	}
 	
 	public init(storeURL: URL, modelBundle: Bundle = Bundle.main) throws {
-		guard let modelURL = modelBundle.url(forResource: "CoreDataFeedModel", withExtension: "momd"),
+		guard let modelURL = modelBundle.url(forResource: CoreDataFeedStore.modelName, withExtension: "momd"),
 			  let model = NSManagedObjectModel(contentsOf: modelURL) else {
 			throw Error.modelNotFound
 		}
 		
-		container = NSPersistentContainer(name: "CoreDataFeedModel", managedObjectModel: model)
+		container = NSPersistentContainer(name: CoreDataFeedStore.modelName, managedObjectModel: model)
 		container.persistentStoreDescriptions = [NSPersistentStoreDescription(url: storeURL)]
 		container.loadPersistentStores(completionHandler: {_,_ in})
 		context = container.newBackgroundContext()
