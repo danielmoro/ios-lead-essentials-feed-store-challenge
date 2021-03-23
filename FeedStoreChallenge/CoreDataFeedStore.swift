@@ -54,7 +54,7 @@ public class CoreDataFeedStore: FeedStore {
 	public func retrieve(completion: @escaping RetrievalCompletion) {
 		context.perform { [unowned self] in
 			do {
-				if let cache = try fetchCache(), let timestamp = cache.date {
+				if let cache = try CoreDataCache.fetch(in: context), let timestamp = cache.date {
 					completion(.found(feed: cache.localFeed, timestamp: timestamp))
 				} else {
 					completion(.empty)
@@ -65,14 +65,8 @@ public class CoreDataFeedStore: FeedStore {
 		}
 	}
 	
-	private func fetchCache() throws -> CoreDataCache? {
-		let fetchRequest: NSFetchRequest<CoreDataCache> = CoreDataCache.fetchRequest()
-		let fetchResult = try self.context.fetch(fetchRequest)
-		return fetchResult.first
-	}
-	
 	private func deleteCacheIfNeeded() throws {
-		if let cache = try fetchCache() {
+		if let cache = try CoreDataCache.fetch(in: context) {
 			self.context.delete(cache)
 		}
 	}
@@ -109,5 +103,11 @@ private extension CoreDataCache {
 		}
 
 		return feed.compactMap(\.local)
+	}
+	
+	static func fetch(in context: NSManagedObjectContext) throws -> CoreDataCache? {
+		let fetchRequest: NSFetchRequest<CoreDataCache> = self.fetchRequest()
+		let fetchResult = try context.fetch(fetchRequest)
+		return fetchResult.first
 	}
 }
