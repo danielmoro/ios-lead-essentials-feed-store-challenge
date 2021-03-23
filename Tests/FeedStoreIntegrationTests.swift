@@ -72,15 +72,48 @@ class FeedStoreIntegrationTests: XCTestCase {
 	// - MARK: Helpers
 	
 	private func makeSUT() throws -> FeedStore {
-		fatalError("Must be implemented")
+		let bundle = Bundle(for: CoreDataFeedStore.self)
+		let storeURL = specificStoreURL()
+		let sut = try CoreDataFeedStore(storeURL: storeURL, modelBundle: bundle)
+		trackMemoryLeaks(sut)
+		return sut
+	}
+	
+	private func specificStoreURL() -> URL {
+		let cachesURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
+		let storeURL = cachesURL.appendingPathComponent("\(type(of: self)).sqlite")
+		return storeURL
+	}
+	
+	private func removeCache() {
+		try? FileManager.default.removeItem(at: specificStoreURL())
+		let shmURL = specificStoreURL().deletingPathExtension().appendingPathComponent(".sqlite-shm")
+		let owlURL = specificStoreURL().deletingPathExtension().appendingPathComponent(".sqlite-owl")
+		try? FileManager.default.removeItem(at: shmURL)
+		try? FileManager.default.removeItem(at: owlURL)
 	}
 	
 	private func setupEmptyStoreState() throws {
-		
+		removeCache()
 	}
 	
 	private func undoStoreSideEffects() throws {
-		
+		removeCache()
+	}
+	
+	private func trackMemoryLeaks(
+		_ instance: AnyObject,
+		file: StaticString = #filePath,
+		line: UInt = #line
+	) {
+		addTeardownBlock { [weak instance] in
+			XCTAssertNil(
+				instance,
+				"Instance should have been deallocated. Potential memory leak.",
+				file: file,
+				line: line
+			)
+		}
 	}
 	
 }
