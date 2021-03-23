@@ -31,8 +31,14 @@ public class CoreDataFeedStore: FeedStore {
 	}
 	
 	public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
-		_ = CoreDataCache(feed: feed, timestamp: timestamp, insertInto: context)
 		context.perform { [unowned self] in
+			let fetchRequest: NSFetchRequest<CoreDataCache> = CoreDataCache.fetchRequest()
+			let fetchResult = try? self.context.fetch(fetchRequest)
+			if let cache = fetchResult?.first {
+				self.context.delete(cache)
+			}
+			
+			_ = CoreDataCache(feed: feed, timestamp: timestamp, insertInto: context)
 			try? self.context.save()
 			completion(nil)
 		}
