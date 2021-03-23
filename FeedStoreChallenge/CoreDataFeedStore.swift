@@ -27,10 +27,10 @@ public class CoreDataFeedStore: FeedStore {
 	}
 	
 	public func deleteCachedFeed(completion: @escaping DeletionCompletion) {
-		context.perform { [unowned self] in
+		perform { context in
 			do {
 				try CoreDataCache.deleteCache(in: context)
-				try self.context.save()
+				try context.save()
 				completion(nil)
 			} catch {
 				completion(error)
@@ -39,11 +39,11 @@ public class CoreDataFeedStore: FeedStore {
 	}
 	
 	public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
-		context.perform { [unowned self] in
+		perform { context in
 			do {
 				try CoreDataCache.deleteCache(in: context)
 				_ = CoreDataCache(feed: feed, timestamp: timestamp, insertInto: context)
-				try self.context.save()
+				try context.save()
 				completion(nil)
 			} catch {
 				completion(error)
@@ -52,7 +52,7 @@ public class CoreDataFeedStore: FeedStore {
 	}
 	
 	public func retrieve(completion: @escaping RetrievalCompletion) {
-		context.perform { [unowned self] in
+		perform { context in
 			do {
 				if let cache = try CoreDataCache.fetch(in: context), let timestamp = cache.date {
 					completion(.found(feed: cache.localFeed, timestamp: timestamp))
@@ -62,6 +62,12 @@ public class CoreDataFeedStore: FeedStore {
 			} catch {
 				completion(.failure(error))
 			}
+		}
+	}
+	
+	private func perform(_ action: @escaping(NSManagedObjectContext)->Void) {
+		context.perform {
+			action(self.context)
 		}
 	}
 }
