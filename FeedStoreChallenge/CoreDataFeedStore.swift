@@ -29,7 +29,7 @@ public class CoreDataFeedStore: FeedStore {
 	public func deleteCachedFeed(completion: @escaping DeletionCompletion) {
 		context.perform { [unowned self] in
 			do {
-				try deleteCacheIfNeeded()
+				try CoreDataCache.deleteCache(in: context)
 				try self.context.save()
 				completion(nil)
 			} catch {
@@ -41,7 +41,7 @@ public class CoreDataFeedStore: FeedStore {
 	public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
 		context.perform { [unowned self] in
 			do {
-				try deleteCacheIfNeeded()
+				try CoreDataCache.deleteCache(in: context)
 				_ = CoreDataCache(feed: feed, timestamp: timestamp, insertInto: context)
 				try self.context.save()
 				completion(nil)
@@ -62,12 +62,6 @@ public class CoreDataFeedStore: FeedStore {
 			} catch {
 				completion(.failure(error))
 			}
-		}
-	}
-	
-	private func deleteCacheIfNeeded() throws {
-		if let cache = try CoreDataCache.fetch(in: context) {
-			self.context.delete(cache)
 		}
 	}
 }
@@ -109,5 +103,11 @@ private extension CoreDataCache {
 		let fetchRequest: NSFetchRequest<CoreDataCache> = self.fetchRequest()
 		let fetchResult = try context.fetch(fetchRequest)
 		return fetchResult.first
+	}
+	
+	static func deleteCache(in context: NSManagedObjectContext) throws {
+		if let cache = try self.fetch(in: context) {
+			context.delete(cache)
+		}
 	}
 }
