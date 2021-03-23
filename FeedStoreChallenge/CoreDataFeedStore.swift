@@ -42,7 +42,7 @@ public class CoreDataFeedStore: FeedStore {
 		perform { context in
 			do {
 				try CoreDataCache.deleteCache(in: context)
-				_ = CoreDataCache(feed: feed, timestamp: timestamp, insertInto: context)
+				CoreDataCache.make(from: feed, timestamp: timestamp, in: context)
 				try context.save()
 				completion(nil)
 			} catch {
@@ -91,12 +91,6 @@ private extension CoreDataFeedImage {
 }
 
 private extension CoreDataCache {
-	convenience init(feed: [LocalFeedImage], timestamp: Date, insertInto context: NSManagedObjectContext) {
-		self.init(context: context)
-		date = timestamp
-		self.feed = NSOrderedSet(array: feed.map { CoreDataFeedImage($0, insertInto: context) })
-	}
-
 	var localFeed: [LocalFeedImage] {
 		guard let feed = feed?.array as? [CoreDataFeedImage] else {
 			return []
@@ -115,5 +109,11 @@ private extension CoreDataCache {
 		if let cache = try self.fetch(in: context) {
 			context.delete(cache)
 		}
+	}
+	
+	static func make(from feed: [LocalFeedImage], timestamp: Date, in context: NSManagedObjectContext) {
+		let cache = self.init(context: context)
+		cache.date = timestamp
+		cache.feed = NSOrderedSet(array: feed.map { CoreDataFeedImage($0, insertInto: context) })
 	}
 }
