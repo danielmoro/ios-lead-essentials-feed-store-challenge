@@ -15,7 +15,7 @@ class CoreDataFeedStore: FeedStore {
 	}
 	
 	func retrieve(completion: @escaping RetrievalCompletion) {
-		
+		completion(.empty)
 	}
 }
 
@@ -34,9 +34,9 @@ class FeedStoreChallengeTests: XCTestCase, FeedStoreSpecs {
 	//  ***********************
 	
 	func test_retrieve_deliversEmptyOnEmptyCache() throws {
-//		let sut = try makeSUT()
-//		
-//		assertThatRetrieveDeliversEmptyOnEmptyCache(on: sut)
+		let sut = try makeSUT()
+		
+		assertThatRetrieveDeliversEmptyOnEmptyCache(on: sut)
 	}
 	
 	func test_retrieve_hasNoSideEffectsOnEmptyCache() throws {
