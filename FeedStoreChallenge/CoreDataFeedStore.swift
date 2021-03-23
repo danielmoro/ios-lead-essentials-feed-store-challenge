@@ -31,10 +31,23 @@ public class CoreDataFeedStore: FeedStore {
 	}
 	
 	public func insert(_ feed: [LocalFeedImage], timestamp: Date, completion: @escaping InsertionCompletion) {
+		_ = CoreDataCache(feed: feed, timestamp: timestamp, insertInto: context)
+		context.perform { [unowned self] in
+			try? self.context.save()
+			completion(nil)
+		}
 	}
 	
 	public func retrieve(completion: @escaping RetrievalCompletion) {
-		completion(.empty)
+		context.perform { [unowned self] in
+			let fetchRequest: NSFetchRequest<CoreDataCache> = CoreDataCache.fetchRequest()
+			let fetchResult = try? self.context.fetch(fetchRequest)
+			if let cache = fetchResult?.first, let timestamp = cache.date {
+				completion(.found(feed: cache.localFeed, timestamp: timestamp))
+			} else {
+				completion(.empty)
+			}
+		}
 	}
 }
 
