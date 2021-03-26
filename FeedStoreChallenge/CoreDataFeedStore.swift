@@ -57,8 +57,8 @@ public class CoreDataFeedStore: FeedStore {
 	public func retrieve(completion: @escaping RetrievalCompletion) {
 		perform { context in
 			do {
-				if let cache = try CoreDataCache.fetch(in: context), let timestamp = cache.date {
-					completion(.found(feed: cache.localFeed, timestamp: timestamp))
+				if let cache = try CoreDataCache.fetch(in: context) {
+					completion(.found(feed: cache.localFeed, timestamp: cache.date))
 				} else {
 					completion(.empty)
 				}
@@ -85,10 +85,6 @@ private extension CoreDataFeedImage {
 	}
 	
 	var local: LocalFeedImage? {
-		guard let id = id, let url = url else {
-			return nil
-		}
-		
 		return LocalFeedImage(id: id, description: imageDescription, location: location, url: url)
 	}
 }

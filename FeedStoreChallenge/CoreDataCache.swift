@@ -9,7 +9,7 @@ import CoreData
 
 public class CoreDataCache: NSManagedObject,Identifiable {
 	
-	@NSManaged public var date: Date?
+	@NSManaged public var date: Date
 	@NSManaged public var feed: NSOrderedSet?
 	
 	@objc(insertObject:inFeedAtIndex:)
