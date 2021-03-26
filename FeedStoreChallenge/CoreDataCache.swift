@@ -7,7 +7,7 @@
 import Foundation
 import CoreData
 
-class CoreDataCache: NSManagedObject,Identifiable {
+class CoreDataCache: NSManagedObject {
 	
 	@NSManaged var date: Date
 	@NSManaged var feed: NSOrderedSet?
