@@ -20,6 +20,8 @@
 		08CE2BB52285BEF100183A1B /* FeedStoreChallengeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CE2BB42285BEF100183A1B /* FeedStoreChallengeTests.swift */; };
 		C6092541260A359000DCBE72 /* CoreDataFeedStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6092540260A359000DCBE72 /* CoreDataFeedStore.swift */; };
 		C6092546260A360F00DCBE72 /* CoreDataFeedModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C6092544260A360F00DCBE72 /* CoreDataFeedModel.xcdatamodeld */; };
+		C6E9B85E260DCB51003C6870 /* CoreDataCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E9B85A260DCB51003C6870 /* CoreDataCache.swift */; };
+		C6E9B860260DCB51003C6870 /* CoreDataFeedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6E9B85C260DCB51003C6870 /* CoreDataFeedImage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,8 @@
 		08CE2BB42285BEF100183A1B /* FeedStoreChallengeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedStoreChallengeTests.swift; sourceTree = "<group>"; };
 		C6092540260A359000DCBE72 /* CoreDataFeedStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataFeedStore.swift; sourceTree = "<group>"; };
 		C6092545260A360F00DCBE72 /* CoreDataFeedModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataFeedModel.xcdatamodel; sourceTree = "<group>"; };
+		C6E9B85A260DCB51003C6870 /* CoreDataCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataCache.swift; sourceTree = "<group>"; };
+		C6E9B85C260DCB51003C6870 /* CoreDataFeedImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataFeedImage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +96,8 @@
 		08CE2B8D2285BBD100183A1B /* FeedStoreChallenge */ = {
 			isa = PBXGroup;
 			children = (
+				C6E9B85A260DCB51003C6870 /* CoreDataCache.swift */,
+				C6E9B85C260DCB51003C6870 /* CoreDataFeedImage.swift */,
 				C6092544260A360F00DCBE72 /* CoreDataFeedModel.xcdatamodeld */,
 				08CE2BA72285BCC600183A1B /* LocalFeedImage.swift */,
 				08CE2BA52285BCB600183A1B /* FeedStore.swift */,
@@ -237,6 +243,8 @@
 			files = (
 				C6092541260A359000DCBE72 /* CoreDataFeedStore.swift in Sources */,
 				08CE2BA62285BCB600183A1B /* FeedStore.swift in Sources */,
+				C6E9B860260DCB51003C6870 /* CoreDataFeedImage.swift in Sources */,
+				C6E9B85E260DCB51003C6870 /* CoreDataCache.swift in Sources */,
 				C6092546260A360F00DCBE72 /* CoreDataFeedModel.xcdatamodeld in Sources */,
 				08CE2BA82285BCC600183A1B /* LocalFeedImage.swift in Sources */,
 			);
