@@ -7,17 +7,13 @@
 import Foundation
 import CoreData
 
-public class CoreDataFeedImage: NSManagedObject, Identifiable {
+class CoreDataFeedImage: NSManagedObject, Identifiable {
 	
-	@NSManaged public var id: UUID
-	@NSManaged public var imageDescription: String?
-	@NSManaged public var location: String?
-	@NSManaged public var url: URL
-	@NSManaged public var cache: CoreDataCache
-	
-	@nonobjc public class func fetchRequest() -> NSFetchRequest<CoreDataFeedImage> {
-		return NSFetchRequest<CoreDataFeedImage>(entityName: "CoreDataFeedImage")
-	}
+	@NSManaged var id: UUID
+	@NSManaged var imageDescription: String?
+	@NSManaged var location: String?
+	@NSManaged var url: URL
+	@NSManaged var cache: CoreDataCache
 }
 
 extension CoreDataFeedImage {
