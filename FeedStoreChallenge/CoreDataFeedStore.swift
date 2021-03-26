@@ -18,14 +18,7 @@ public class CoreDataFeedStore: FeedStore {
 	}
 	
 	public init(storeURL: URL, modelBundle: Bundle = Bundle.main) throws {
-		guard let modelURL = modelBundle.url(forResource: CoreDataFeedStore.modelName, withExtension: "momd"),
-			  let model = NSManagedObjectModel(contentsOf: modelURL) else {
-			throw Error.modelNotFound
-		}
-		
-		container = NSPersistentContainer(name: CoreDataFeedStore.modelName, managedObjectModel: model)
-		container.persistentStoreDescriptions = [NSPersistentStoreDescription(url: storeURL)]
-		container.loadPersistentStores(completionHandler: {_,_ in})
+		container = try CoreDataFeedStore.loadPersistentContainer(storeURL, bundle: modelBundle)
 		context = container.newBackgroundContext()
 	}
 	
@@ -72,5 +65,25 @@ public class CoreDataFeedStore: FeedStore {
 		context.perform {
 			action(self.context)
 		}
+	}
+	
+	private static func initializePersistentContainer(_ storeURL: URL, bundle: Bundle) throws -> NSPersistentContainer {
+		guard let modelURL = bundle.url(forResource: CoreDataFeedStore.modelName, withExtension: "momd"),
+			  let model = NSManagedObjectModel(contentsOf: modelURL) else {
+			throw Error.modelNotFound
+		}
+		
+		let container = NSPersistentContainer(name: CoreDataFeedStore.modelName, managedObjectModel: model)
+		container.persistentStoreDescriptions = [NSPersistentStoreDescription(url: storeURL)]
+		
+		return container
+	}
+	
+	private static func loadPersistentContainer(_ storeURL: URL, bundle: Bundle) throws -> NSPersistentContainer {
+		
+		let container = try initializePersistentContainer(storeURL, bundle: bundle)
+		container.loadPersistentStores {_, _ in }
+		
+		return container
 	}
 }
