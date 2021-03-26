@@ -9,6 +9,7 @@ public class CoreDataFeedStore: FeedStore {
 	
 	enum Error: Swift.Error {
 		case modelNotFound
+		case loadFailed(Swift.Error)
 	}
 	
 	private var container: NSPersistentContainer
@@ -82,7 +83,15 @@ public class CoreDataFeedStore: FeedStore {
 	private static func loadPersistentContainer(_ storeURL: URL, bundle: Bundle) throws -> NSPersistentContainer {
 		
 		let container = try initializePersistentContainer(storeURL, bundle: bundle)
-		container.loadPersistentStores {_, _ in }
+		
+		var loadError: Swift.Error? = nil
+		container.loadPersistentStores {_, error in
+			loadError = error
+		}
+		
+		if let loadError = loadError {
+			throw Error.loadFailed(loadError)
+		}
 		
 		return container
 	}
