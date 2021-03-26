@@ -11,9 +11,7 @@ class CoreDataCache: NSManagedObject {
 	
 	@NSManaged var date: Date
 	@NSManaged var feed: NSOrderedSet?
-	
-	@NSManaged func insertIntoFeed(_ value: CoreDataFeedImage, at idx: Int)
-	
+		
 	@nonobjc class func fetchRequest() -> NSFetchRequest<CoreDataCache> {
 		return NSFetchRequest<CoreDataCache>(entityName: "CoreDataCache")
 	}
