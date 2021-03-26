@@ -19,3 +19,17 @@ public class CoreDataFeedImage: NSManagedObject, Identifiable {
 		return NSFetchRequest<CoreDataFeedImage>(entityName: "CoreDataFeedImage")
 	}
 }
+
+extension CoreDataFeedImage {
+	convenience init(_ image: LocalFeedImage, insertInto context: NSManagedObjectContext) {
+		self.init(context: context)
+		id = image.id
+		imageDescription = image.description
+		location = image.location
+		url = image.url
+	}
+	
+	var local: LocalFeedImage? {
+		return LocalFeedImage(id: id, description: imageDescription, location: location, url: url)
+	}
+}
