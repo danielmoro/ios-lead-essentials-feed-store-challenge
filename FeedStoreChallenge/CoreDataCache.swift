@@ -10,7 +10,7 @@ import CoreData
 class CoreDataCache: NSManagedObject {
 	
 	@NSManaged var date: Date
-	@NSManaged var feed: NSOrderedSet?
+	@NSManaged var feed: NSOrderedSet
 		
 	@nonobjc class func fetchRequest() -> NSFetchRequest<CoreDataCache> {
 		return NSFetchRequest<CoreDataCache>(entityName: "CoreDataCache")
@@ -19,11 +19,11 @@ class CoreDataCache: NSManagedObject {
 
 extension CoreDataCache {
 	var localFeed: [LocalFeedImage] {
-		guard let feed = feed?.array as? [CoreDataFeedImage] else {
+		guard let feed = feed.array as? [CoreDataFeedImage] else {
 			return []
 		}
 
-		return feed.compactMap(\.local)
+		return feed.map(\.local)
 	}
 	
 	static func fetch(in context: NSManagedObjectContext) throws -> CoreDataCache? {
