@@ -73,22 +73,22 @@ class FeedStoreIntegrationTests: XCTestCase {
 	
 	private func makeSUT(file: StaticString = #filePath, line: UInt = #line) throws -> FeedStore {
 		let bundle = Bundle(for: CoreDataFeedStore.self)
-		let storeURL = specificStoreURL()
+		let storeURL = testSpecificStoreURL()
 		let sut = try CoreDataFeedStore(storeURL: storeURL, modelBundle: bundle)
 		trackMemoryLeaks(sut, file: file, line: line)
 		return sut
 	}
 	
-	private func specificStoreURL() -> URL {
+	private func testSpecificStoreURL() -> URL {
 		let cachesURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
 		let storeURL = cachesURL.appendingPathComponent("\(type(of: self)).sqlite")
 		return storeURL
 	}
 	
 	private func removeCache() {
-		try? FileManager.default.removeItem(at: specificStoreURL())
-		let shmURL = specificStoreURL().deletingPathExtension().appendingPathComponent(".sqlite-shm")
-		let owlURL = specificStoreURL().deletingPathExtension().appendingPathComponent(".sqlite-owl")
+		try? FileManager.default.removeItem(at: testSpecificStoreURL())
+		let shmURL = testSpecificStoreURL().deletingPathExtension().appendingPathComponent(".sqlite-shm")
+		let owlURL = testSpecificStoreURL().deletingPathExtension().appendingPathComponent(".sqlite-owl")
 		try? FileManager.default.removeItem(at: shmURL)
 		try? FileManager.default.removeItem(at: owlURL)
 	}
