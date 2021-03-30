@@ -25,7 +25,7 @@ extension CoreDataFeedImage {
 		url = image.url
 	}
 	
-	var local: LocalFeedImage? {
+	var local: LocalFeedImage {
 		return LocalFeedImage(id: id, description: imageDescription, location: location, url: url)
 	}
 }
